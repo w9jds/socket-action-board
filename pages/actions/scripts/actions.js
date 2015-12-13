@@ -16,7 +16,7 @@
 		}
 		
 		function _connect() {
-			var host = "http://localhost";
+			var host = "http://localhost:8080/actions";
 			
 			try {
 				_socket = io.connect(host);
