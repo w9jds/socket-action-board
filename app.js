@@ -27,4 +27,4 @@ function broadcast(message) {
     io.sockets.emit(message);
 }
 
-server.listen(8080);
+server.listen(8000);
