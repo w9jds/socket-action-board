@@ -1,22 +1,18 @@
-@font-face {
-    
-}
-
 .notify-container,
-.notify-header,
-.notify-content {
+.notify-content,
+.notify-header {
     width: 400px;
     overflow: hidden;
 }
 
 .notify-header,
 .notify-content {
+    display: none;
     position: relative;
 }
 
 .notify-container {
-    height: 120px;
-    background: #2e5784;
+    height: 126px;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -24,20 +20,29 @@
 }
 
 .notify-header {
-    height: 26px;
+    height: 29px;
+    line-height: 1.2;
     background: #0f3369;
     text-align: center;
     font-size: 24px;
 }
 
 .notify-content {
-    height: 94px;
+    height: 100px;
     background: #2e5794;
     color: white;
 }
 
+.notify-text {
+    height: 100%;
+    margin-left: 100px;
+    text-align: center;
+    font-size: 18;
+}
+
 #logo {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
+    padding: 8px;
     float: left;
 }

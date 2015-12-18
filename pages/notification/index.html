@@ -2,9 +2,9 @@
     <head>
         <meta http-equiv="x-ua-compatible" content="IE=10">
 		
-        <link rel="stylesheet" type="text/css" href="../css/notification.css">
+        <link rel="stylesheet" type="text/css" href="./css/notification.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-		<script src="./socket.io/socket.io.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 		<script src="./scripts/notification.js"></script>
     </head>
     <body>
@@ -13,11 +13,12 @@
                 <span id="title"></span>
             </div>    
             
-            <div id="notify-content">
+            <div class="notify-content">
                 <img id="logo" />
-                <div id="notify-text">
+                <div class="notify-text">
                     <span id="content"></span>
                 </div>
+            </div>
         </div>
         
         <script>

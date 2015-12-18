@@ -1,5 +1,5 @@
 ; (function(global, $, io) {
-	"use strict";
+	'use strict';
 	
 	global.Pages = global.Pages || {};
 	global.Pages.Actions = (function() {
@@ -9,35 +9,30 @@
 		function init() {
 			
 			_connect();
+			_attachEvents();
 		}
 		
-		function _send() {
-
+		function _attachEvents() {
+			$('#discord').click(sendDiscord);
 		}
 		
 		function _connect() {
-			var host = 'http://77.81.241.222:8000/actions';
+			// var host = 'http://77.81.241.222:8000/actions';
+			var host = 'http://localhost:8000/actions';
 			
 			try {
 				_socket = io.connect(host);
-				
-				// message('<p class="event">Socket Status: '+socket.readyState);
-				
-				// socket.onopen = function(){
-				// 	message('<p class="event">Socket Status: '+socket.readyState+' (open)');
-				// }
-				
-				// socket.onmessage = function(msg){
-				// 	message('<p class="message">Received: '+msg.data);
-				// }
-				
-				// socket.onclose = function(){
-				// 	message('<p class="event">Socket Status: '+socket.readyState+' (Closed)');
-				// }			
-				
+
 			} catch(exception) {
 				
 			}
+		}
+		
+		function sendDiscord() {
+			_socket.emit('notify', {
+				title: 'Discord',
+				message: 'Join my brand new Discord channel! discord.swebliss.com'
+			});
 		}
 		
 		return {

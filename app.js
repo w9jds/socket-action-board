@@ -17,13 +17,15 @@ function _attachEvents() {
 function clientConnect(socket) {
     console.log('New Connection Established...');
     
-    socket.on('action fired', actionRecieved);
+    socket.on('notify', function(message) {
+        broadcastNotifiction(message);
+    });
 }
 
 function notifyConnect(socket) {
     console.log('New Notification Client Connected...');
     
-    
+
 }
 
 function actionRecieved(content) {
@@ -33,7 +35,7 @@ function actionRecieved(content) {
 }
 
 function broadcastNotifiction(message) {
-    notifications.emit(message);
+    notifications.send(message);
 }
 
 server.listen(8000);
