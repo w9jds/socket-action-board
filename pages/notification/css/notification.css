@@ -1,3 +1,7 @@
+body {
+    font-family: "Montserrat", sans-serif;
+}
+
 .notify-container,
 .notify-content,
 .notify-header {
@@ -12,7 +16,7 @@
 }
 
 .notify-container {
-    height: 126px;
+    height: 170px;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -20,29 +24,39 @@
 }
 
 .notify-header {
-    height: 29px;
-    line-height: 1.2;
-    background: #0f3369;
+    height: 35px;
+    line-height: 1.5;
+    background: #000;
     text-align: center;
     font-size: 24px;
+    color: #c49866;
 }
 
 .notify-content {
-    height: 100px;
-    background: #2e5794;
+    height: 135px;
+    background: #4d4d4d;
     color: white;
 }
 
 .notify-text {
     height: 100%;
-    margin-left: 100px;
-    text-align: center;
+    position: absolute;
     font-size: 18;
+    margin-left: 112px;
+    display: table;
+    text-align: center;
 }
+    
+    .notify-text > span {
+        position: relative;
+        display: table-cell;
+        vertical-align: middle;
+        padding: 10px;
+    }
 
 #logo {
-    width: 80px;
-    height: 80px;
-    padding: 8px;
+    width: 90px;
+    height: 90px;
+    padding: 22.5px 11px;
     float: left;
 }
