@@ -2,61 +2,57 @@ body {
     font-family: "Montserrat", sans-serif;
 }
 
-.notify-container,
-.notify-content,
-.notify-header {
-    width: 400px;
-    overflow: hidden;
-}
-
-.notify-header,
-.notify-content {
-    display: none;
-    position: relative;
-}
-
-.notify-container {
-    height: 170px;
+.container {
+    left: 95px;
+    top: 0;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    color: white;
-}
-
-.notify-header {
-    height: 35px;
-    line-height: 1.5;
-    background: #000;
-    text-align: center;
-    font-size: 24px;
-    color: #c49866;
+    display: none;
 }
 
 .notify-content {
-    height: 135px;
-    background: #4d4d4d;
+    background: rgba(77,77,77,.7);
+    overflow: hidden;
     color: white;
+    display: table;
+    min-height: 90px;
+    max-height: 380px;
+}
+
+.line {
+    display: none;
+    position: absolute;
+    top: 90px;
+    left: 180px;
+    height: 5px;
+    background: #fff;
+    width: 5px;
 }
 
 .notify-text {
-    height: 100%;
-    position: absolute;
-    font-size: 18;
-    margin-left: 112px;
-    display: table;
+    font-size: 22;
+    padding: 10px 20px;
+    max-width: 460px;
+    min-width: 360px;
     text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    overflow: hidden;
 }
-    
-    .notify-text > span {
-        position: relative;
-        display: table-cell;
-        vertical-align: middle;
-        padding: 10px;
-    }
 
-#logo {
-    width: 90px;
-    height: 90px;
-    padding: 22.5px 11px;
-    float: left;
+.icon {
+    display: none;
+    position: absolute;
+    top: 80;
+    left: 0;
+    height: 10px;
+    width: 10px;
+    background: #c49866;
+    overflow: hidden;
+}
+
+.logo {
+    margin: 10px;
+    height: 70px;
+    width: 70px;
+    background-size: contain;
 }

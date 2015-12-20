@@ -22,8 +22,8 @@
 		}
 		
 		function _connect() {
-			// var host = 'http://77.81.241.222:8000/actions';
-			var host = 'http://localhost:8000/actions';
+			var host = 'http://77.81.241.222:8000/actions';
+			// var host = 'http://localhost:8000/actions';
 			
 			try {
 				_socket = io.connect(host);
@@ -45,17 +45,13 @@
 				title: 'Youtube',
 				message: 'Check out my youtube channel at https://goo.gl/fN0ZZQ',
 				styles: [{ 
-					selector: '.notify-header',
+					selector: '.icon',
 					property: 'background-color',
 					value: '#b31217'
 				}, {
-					selector: '.notify-header',
-					property: 'color',
-					value: '#fff'
-				}, {
 					selector: '.notify-content',
-					property: 'background-color',
-					value: '#e52d27'
+					property: 'background',
+					value: 'rgba(229,45,27,.7)'
 				}]
 			});
 		}
@@ -65,17 +61,13 @@
 				title: 'Twitter',
 				message: 'Follow me on twitter @Swebliss',
 				styles: [{ 
-					selector: '.notify-header',
+					selector: '.icon',
 					property: 'background-color',
 					value: '#55acee'
 				}, {
-					selector: '.notify-header',
-					property: 'color',
-					value: '#fff'
-				}, {
 					selector: '.notify-content',
-					property: 'background-color',
-					value: '#66757f'
+					property: 'background',
+					value: 'rgba(66,75,127,.7)'
 				}]
 			});
 		}
@@ -85,13 +77,9 @@
 				title: 'Instagram',
 				message: 'Stay up to date with all my selfies by following my Instagram: @Swebliss',
 				styles: [{ 
-					selector: '.notify-header',
+					selector: '.icon',
 					property: 'background-color',
 					value: '#3f729b'
-				}, {
-					selector: '.notify-header',
-					property: 'color',
-					value: '#fff'
 				}]
 			});
 		}
