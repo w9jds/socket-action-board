@@ -21,7 +21,7 @@
                     _verifyPermissions(status.token);
                 }
                 else {
-                    $('.twitch-connect').show();
+                    $('.login-container').show();
                 }
             });
         }
