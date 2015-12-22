@@ -24,13 +24,8 @@
 		function _connect() {
 			var host = 'http://77.81.241.222:8000/actions';
 			// var host = 'http://localhost:8000/actions';
-			
-			try {
-				_socket = io.connect(host);
 
-			} catch(exception) {
-				
-			}
+            _socket = io.connect(host);
 		}
 		
 		function sendDiscord() {

@@ -133,14 +133,9 @@
 		function _connect() {
 			var host = 'http://77.81.241.222:8000/notification';
 			// var host = 'http://localhost:8000/notification';
-			
-			try {
-				_socket = io.connect(host);
-				_socket.on('message', _received);
-									
-			} catch(exception) {
-				
-			}
+
+            _socket = io.connect(host);
+            _socket.on('message', _received);
 		}
 		
 		return {
