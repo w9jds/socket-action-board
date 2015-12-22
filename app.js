@@ -15,7 +15,7 @@ app.use('/notification', express.static(__dirname + '/pages/notification'));
 
 app.get('/actions', function(req, res) {
     if (!req.query.usertoken) {
-        res.send('Please login to twitter: ' + window.location.origin);
+        res.send('Please login to twitch on the home page');
     }
     else {
         request('https://api.twitch.tv/kraken?oauth_token=' + req.query.usertoken, function(error, response, body) {
