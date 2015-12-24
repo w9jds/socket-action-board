@@ -2,7 +2,7 @@
 	"use strict";
 	
 	global.Pages = global.Pages || {};
-	global.Pages.Home = (function() {
+	global.Admin.Home = (function() {
 		
 		var _socket;
 		
@@ -12,19 +12,19 @@
             _attachEvents();
 		}
         
-        function _twitch() {
-            Twitch.init({clientId: 'eapkg3vs1icwh3841z5br4hhm3thl61'}, function(error, status) {
-                if (status.authenticated) {
-                    $('.user-menu').show();
+        // function _twitch() {
+        //     Twitch.init({clientId: 'eapkg3vs1icwh3841z5br4hhm3thl61'}, function(error, status) {
+        //         if (status.authenticated) {
+        //             $('.user-menu').show();
                     
-                    _populateNav();
-                    _verifyPermissions(status.token);
-                }
-                else {
-                    $('.login-container').show();
-                }
-            });
-        }
+        //             _populateNav();
+        //             _verifyPermissions(status.token);
+        //         }
+        //         else {
+        //             $('.login-container').show();
+        //         }
+        //     });
+        // }
         
         function _verifyPermissions(token) {
             _socket.emit('user_permission', { 
@@ -33,8 +33,8 @@
         }
 		
 		function _connect() {
-			var host = 'http://77.81.241.222:8000/dashboard';
-			// var host = 'http://localhost:8000/dashboard';
+			var host = 'http://77.81.241.222:8000/admin';
+			// var host = 'http://localhost:8000/admin';
             
             _socket = io.connect(host);
             _socket.on('connect', function() {
@@ -44,14 +44,10 @@
 
 		}
         
-        function _attachEvents() {
-            $('.twitch-connect').click(function() {
-                Twitch.login({ scope: ['user_read','channel_subscriptions'] });
-            });
-            
-            Twitch.events.addListener('auth.login', function() {
-                history.pushState('', document.title, window.location.pathname);
-            });
+        function _attachEvents() {            
+            // Twitch.events.addListener('auth.login', function() {
+            //     history.pushState('', document.title, window.location.pathname);
+            // });
         }
         
         function _populateNav() {
@@ -63,7 +59,6 @@
         
         function _usePermissions(permissions) {
             if (permissions.admin) {
-                $('.admin-dashboard').attr('href', window.location.origin + '/admin?usertoken=' + Twitch.getToken());
                 $('.admin-dashboard').show();
             }
             if (permissions.actionboard) {
