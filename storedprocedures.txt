@@ -1,0 +1,21 @@
+DELIMITER //
+CREATE PROCEDURE create_user(IN username CHAR(25), IN isAdmin BOOLEAN, IN accessActions BOOLEAN)
+BEGIN
+    INSERT INTO permissions (user_name, is_admin, can_use_actions)
+    SELECT * FROM (SELECT username, isAdmin, accessActions) AS tmp
+    WHERE NOT EXISTS (
+        SELECT user_name FROM permissions WHERE user_name = username
+    ) LIMIT 1;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE update_user(IN username CHAR(25), IN isAdmin BOOLEAN, IN accessActions BOOLEAN)
+BEGIN
+    UPDATE permissions
+    SET is_admin = isAdmin, can_use_actions = accessActions
+    WHERE user_name = username;
+END //
+DELIMITER ;
+

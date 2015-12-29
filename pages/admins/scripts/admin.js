@@ -1,10 +1,11 @@
-; (function(global, $, io, Twitch) {
+; (function(global, $, io, Twitch, _) {
 	"use strict";
 	
 	global.Pages = global.Pages || {};
-	global.Admin.Home = (function() {
+	global.Pages.Admin = (function() {
 		
-		var _socket;
+		var _socket,
+            _viewModel;
 		
 		function init() {			
 			_connect();
@@ -12,19 +13,19 @@
             _attachEvents();
 		}
         
-        // function _twitch() {
-        //     Twitch.init({clientId: 'eapkg3vs1icwh3841z5br4hhm3thl61'}, function(error, status) {
-        //         if (status.authenticated) {
-        //             $('.user-menu').show();
+        function _twitch() {
+            // Twitch.init({clientId: 'eapkg3vs1icwh3841z5br4hhm3thl61', token: ''}, function(error, status) {
+            //     if (status.authenticated) {
+            //         $('.user-menu').show();
                     
-        //             _populateNav();
-        //             _verifyPermissions(status.token);
-        //         }
-        //         else {
-        //             $('.login-container').show();
-        //         }
-        //     });
-        // }
+            //         _populateNav();
+            //         _verifyPermissions(status.token);
+            //     }
+            //     else {
+            //         $('.login-container').show();
+            //     }
+            // });
+        }
         
         function _verifyPermissions(token) {
             _socket.emit('user_permission', { 
@@ -41,13 +42,17 @@
                 _twitch(); 
             });
             _socket.on('permissions', _usePermissions);
-
+            _socket.on('refresh_page', function() {
+                location.reload();
+            });
+            _socket.on('userlist', function(users) {
+                _viewModel = new _buildBindings(users);
+            });
 		}
         
-        function _attachEvents() {            
-            // Twitch.events.addListener('auth.login', function() {
-            //     history.pushState('', document.title, window.location.pathname);
-            // });
+        function _attachEvents() {
+            $('.save-button').click(_saveChanges);
+            $('.new-user').click(_addUser);
         }
         
         function _populateNav() {
@@ -55,6 +60,72 @@
                 $('.user-icon').attr('src', user.logo);
                 $('.username').text(user.display_name);
             });
+        }
+        
+        function _addUser() {
+            _viewModel.newUsers.push({
+                username: ko.observable(''),
+                isAdmin: ko.observable(false),
+                accessActions: ko.observable(false)
+            });
+        }
+        
+        function _saveChanges() {
+            var changes = {
+                    updates: [],
+                    creates: []
+                };
+            
+            _.each(_viewModel.users(), function(user) {
+                if (_viewModel.stored[user.id]) {
+                    var stored = _viewModel.stored[user.id];
+                    
+                    if (!!+stored.is_admin !== user.isAdmin() || !!+stored.can_use_actions !== user.accessActions()) {
+                        changes.updates.push({
+                            username: user.username,
+                            isAdmin: user.isAdmin(),
+                            accessActions: user.accessActions()
+                        });
+                    }
+                }
+            });
+            
+            _.each(_viewModel.newUsers(), function(user) {
+                if (user.username()) {
+                    changes.creates.push({
+                        username: user.username(),
+                        isAdmin: user.isAdmin(),
+                        accessActions: user.accessActions()
+                    });
+                }
+            });
+            
+            _socket.emit('update_permissions', changes);
+        }
+        
+        function _buildBindings(users) {
+            var self = this;
+            self.users = ko.observableArray([]);
+            self.newUsers = ko.observableArray([]);
+            self.stored = {};
+            
+            self.load = function() {
+                self.users.removeAll();
+
+                _.each(users, function(user) {
+                    self.stored[user.index] = user;
+                    self.users.push({
+                        id: user.index,
+                        username: user.user_name,
+                        isAdmin: ko.observable(!!+user.is_admin),
+                        accessActions: ko.observable(!!+user.can_use_actions)
+                    });
+                });
+                
+                ko.applyBindings(self);
+            }
+            
+            self.load();
         }
         
         function _usePermissions(permissions) {
@@ -72,4 +143,4 @@
 		};
 		
 	}());
-}(this, this.jQuery, this.io, this.Twitch));
+}(this, this.jQuery, this.io, this.Twitch, this._));

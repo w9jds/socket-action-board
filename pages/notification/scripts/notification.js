@@ -118,18 +118,6 @@
 				.animate({ height: 'toggle', width: 'toggle'}, 200);
 		}
 		
-		// function _animateVerticalMovement($line, duration) {
-		// 	$line.animate({ height: '10px', queue: false}, duration / 2, function() {
-		// 		$line.animate({ height: '3px', queue: false}, duration / 2);
-		// 	});
-		// }
-		
-		// function _animateHorizontalMovement($line, duration) {
-		// 	$line.animate({ width: '10px', queue: false}, duration / 2, function() {
-		// 		$line.animate({ width: '5px', queue: false}, duration / 2);
-		// 	});
-		// }
-		
 		function _connect() {
 			var host = 'http://77.81.241.222:8000/notification';
 			// var host = 'http://localhost:8000/notification';

@@ -13,10 +13,10 @@
 		}
         
         function _twitch() {
-            Twitch.init({clientId: 'eapkg3vs1icwh3841z5br4hhm3thl61'}, function(error, status) {
+            Twitch.init({ clientId: 'eapkg3vs1icwh3841z5br4hhm3thl61' }, function(error, status) {
                 if (status.authenticated) {
                     $('.user-menu').show();
-                    
+
                     _populateNav();
                     _verifyPermissions(status.token);
                 }
@@ -38,10 +38,9 @@
             
             _socket = io.connect(host);
             _socket.on('connect', function() {
-                _twitch(); 
+                _twitch();
             });
             _socket.on('permissions', _usePermissions);
-
 		}
         
         function _attachEvents() {
@@ -62,11 +61,11 @@
         }
         
         function _usePermissions(permissions) {
-            if (permissions.admin) {
+            if (permissions.is_admin) {
                 $('.admin-dashboard').attr('href', window.location.origin + '/admin?usertoken=' + Twitch.getToken());
                 $('.admin-dashboard').show();
             }
-            if (permissions.actionboard) {
+            if (permissions.can_use_actions) {
                 $('.action-dashboard').attr('href', window.location.origin + '/actions?usertoken=' + Twitch.getToken());
                 $('.action-dashboard').show();
             }

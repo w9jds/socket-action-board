@@ -6,13 +6,14 @@
         <link rel="stylesheet" type="text/css" href="./css/admin.css">
         <script src="//code.jquery.com/jquery.min.js"></script>
         <script src="https://ttv-api.s3.amazonaws.com/twitch.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="./scripts/admin.js"></script>
     </head>
     <body>
         
-        <div class="nav-banner">
+        <!--<div class="nav-banner">
             <div class="user-container">
                 <div class="menu-container">
                     <a class="user-menu" style="display: none;">
@@ -30,8 +31,57 @@
                 </div>
 
             </div>
-        </div>
+        </div>-->
         
+        <div class="grid-container">
+            <div class="header-container">
+                <div class="header">
+                    <span>Username</span>
+                </div>
+                <div class="header">
+                    <span>Is admin</span>
+                </div>
+                <div class="header">
+                    <span>Can use actions</span>
+                </div>
+            </div>  
+            <!-- ko foreach: users -->
+                <div class="grid-row">
+                    <div>
+                        <span data-bind="text: username"/>
+                    </div>
+                    <div>
+                        <input type="checkbox" data-bind="checked: isAdmin"/>
+                    </div>
+                    <div>
+                        <input type="checkbox" data-bind="checked: accessActions"/>
+                    </div>
+                </div>
+            <!-- /ko -->
+            <!-- ko foreach: newUsers -->
+                <div class="grid-row">
+                    <div>
+                        <input data-bind="value: username"/>
+                    </div>
+                    <div>
+                        <input type="checkbox" data-bind="checked: isAdmin"/>
+                    </div>
+                    <div>
+                        <input type="checkbox" data-bind="checked: accessActions"/>
+                    </div>
+                </div>
+            <!-- /ko --> 
+            
+            <div class="grid-row">
+                <div></div>
+                <div></div>
+                <div class="button-container">
+                    <button class="new-user">New</button>
+                    <button class="save-button">Save</button>
+                </div>
+            </div>
+        </div>
+ 
         <script>
 			$(function() {
 				$(document).ready(function() {

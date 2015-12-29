@@ -1,7 +1,7 @@
 var express = require('express'),
     request = require('request'),
+    database = require('./libs/db.js'),
     app = express(),
-    config = require('./config.json'),
     server = require('http').Server(app),
     io = require('socket.io')(server),
     home = io.of('/dashboard'),
@@ -16,100 +16,80 @@ app.use('/admin', express.static(__dirname + '/pages/admins'));
 app.use('/notification', express.static(__dirname + '/pages/notification'));
 
 app.get('/actions', function(req, res) {
-    if (!req.query.usertoken) {
-        res.send('Please login to twitch on the home page');
-    }
-    else {
-        request('https://api.twitch.tv/kraken?oauth_token=' + req.query.usertoken, function(error, response, body) {
-            var permissions = buildPermissions(JSON.parse(body));
-
-            if (permissions.admin) {
-                res.sendfile('admin.html', { root: './pages/admins'});
-            }
-            else {
-                res.send('Invalid Permissions. Are you sure you are supposed to be here?');
-            }
-        });
-    }
+    _verifyLoadPage(req, res, 'actions.html', './pages/actions');
 });
 
 app.get('/admin', function(req, res) {
+    _verifyLoadPage(req, res, 'admin.html', './pages/admins');
+});
+
+function _verifyLoadPage(req, res, index, root) {
     if (!req.query.usertoken) {
         res.send('Please login to twitch on the home page');
     }
     else {
-        request('https://api.twitch.tv/kraken?oauth_token=' + req.query.usertoken, function(error, response, body) {
-            var permissions = buildPermissions(JSON.parse(body));
-
-            if (permissions.actionboard) {
-                res.sendfile('actions.html', { root: './pages/actions'});
-            }
-            else {
-                res.send('Invalid Permissions. Are you sure you are supposed to be here?');
-            }
+        getTwitchTokenInfo(req.query.usertoken, function(body) {
+            getUserPermissions(JSON.parse(body), function(permissions) {
+                if (permissions.is_admin) {
+                    res.sendfile(index, { root: root});
+                }
+                else {
+                    res.send('Invalid Permissions. Are you sure you are supposed to be here?');
+                }
+            });
         });
     }
-})
+}
 
 function _attachEvents() {
     home.on('connection', homeConnect);
     actions.on('connection', actionsConnect);
     admin.on('connection', adminConnect);
-    notifications.on('connection', notifyConnect);
 }
 
 function homeConnect(socket) {
-    // console.log('Homepage client connected...');
-
     socket.on('user_permission', function(data) {
-        verifyUserAccess(socket, data.auth_token);
+        getTwitchTokenInfo(data.auth_token, function(body) {
+            getUserPermissions(JSON.parse(body), function(permissions) {
+                socket.emit('permissions', permissions);
+            });
+        });
     });
 }
 
 function actionsConnect(socket) {
     socket.on('notify', function(message) {
-        broadcastNotifiction(message);
+        notifications.send(message);
     });
 }
 
 function adminConnect(socket) {
-    // console.log('Admin client connected...');
+    database.getalluserpermissions(function(users) {
+        socket.emit('userlist', users);
+    });
 
     socket.on('update_permissions', function(data) {
-
+        data.updates.forEach(function(element) {
+           database.updateuserpermissions(element.username, element.isAdmin, element.accessActions);
+        }, this);
+        data.creates.forEach(function(element) {
+            database.createnewuser(element.username, element.isAdmin, element.accessActions);
+        }, this);
+        
+        socket.emit('refresh_page', true);
     });
 }
 
-function notifyConnect(socket) {
-    // console.log('Notification client connected...');
-}
-
-function buildPermissions(response) {
-    var permissions = {
-        admin: false,
-        actionboard: false
-    };
-
-    if (response.token.valid) {
-        if (config.admins.indexOf(response.token.user_name) > -1) {
-            permissions.admin = true;
-        }
-        if (config.actionboard.indexOf(response.token.user_name) > -1) {
-            permissions.actionboard = true;
-        }
-    }
-
-    return permissions;
-}
-
-function verifyUserAccess(socket, token) {
+function getTwitchTokenInfo(token, callback) {
     request('https://api.twitch.tv/kraken?oauth_token=' + token, function(error, response, body) {
-        socket.emit('permissions', buildPermissions(JSON.parse(body)));
+        callback(response.body);
     });
 }
 
-function broadcastNotifiction(message) {
-    notifications.send(message);
+function getUserPermissions(body, callback) {
+    database.getuserpermissions(body, function(permissions) {
+        callback(permissions);
+    });
 }
 
 server.listen(8000);
