@@ -55,3 +55,21 @@ a:active {
 .color-1 {
 	background: #0e83cd;
 }
+
+.custom-container > div {
+    margin-top: 15px;
+    color: white;
+}
+
+.custom-container {
+    margin-left: 30px;
+}
+
+.custom-message {
+    height: 80px; 
+    width: 235px;
+}
+
+#send-custom {
+    margin-top: 5px;
+}

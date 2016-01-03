@@ -13,12 +13,19 @@
 		}
 		
 		function _attachEvents() {
-			$('#discord').click(sendDiscord);
-			$('#youtube').click(sendYoutube);
-			$('#twitter').click(sendTwitter);
-			$('#instagram').click(sendInstagram);
-			$('#snapchat').click(sendSnapchat);
-			$('#tablet').click(sendTablet);
+			$('#discord').click(_sendDiscord);
+			$('#youtube').click(_sendYoutube);
+			$('#twitter').click(_sendTwitter);
+			$('#instagram').click(_sendInstagram);
+			$('#snapchat').click(_sendSnapchat);
+			$('#tablet').click(_sendTablet);
+            $('#send-custom').click(_sendCustom);
+            $('.use-audio').change(function() {
+                $('.audio-url-container').toggle();
+            });
+            $('#refresh').click(function() {
+                _socket.emit('reload', {}); 
+            });
 		}
 		
 		function _connect() {
@@ -27,17 +34,40 @@
 
             _socket = io.connect(host);
 		}
+        
+        function _sendCustom() {
+            var message = {
+                message: '',
+                styles: []
+            };
+            
+            if ($('.use-audio').is(':checked')) {
+                var audio = $('.audio-url').val();
+                message.audio = audio ? { source: audio } : true;
+            }
+            
+            if ($('.icon-url').val()) {
+                message.styles.push({
+                    selector: '.logo',
+                    property: 'background-image',
+                    value: 'url(' + $('.icon-url').val() + ')'
+                });
+            }
+            
+            if ($('.custom-message').val()) {
+                message.message = $('.custom-message').val();
+                _socket.emit('notify', message);
+            }
+        }
 		
-		function sendDiscord() {
+		function _sendDiscord() {
 			_socket.emit('notify', {
-				title: 'Discord',
 				message: 'Join my brand new Discord channel! discord.swebliss.com'
 			});
 		}
 		
-		function sendYoutube() {
+		function _sendYoutube() {
 			_socket.emit('notify', {
-				title: 'Youtube',
 				message: 'Check out my youtube channel at https://goo.gl/fN0ZZQ',
 				styles: [{ 
 					selector: '.icon',
@@ -51,9 +81,8 @@
 			});
 		}
 		
-		function sendTwitter() {
+		function _sendTwitter() {
 			_socket.emit('notify', {
-				title: 'Twitter',
 				message: 'Follow me on twitter @Swebliss',
 				styles: [{ 
 					selector: '.icon',
@@ -67,9 +96,8 @@
 			});
 		}
 		
-		function sendInstagram() {
+		function _sendInstagram() {
 			_socket.emit('notify', {
-				title: 'Instagram',
 				message: 'Stay up to date with all my selfies by following my Instagram: @Swebliss',
 				styles: [{ 
 					selector: '.icon',
@@ -79,23 +107,20 @@
 			});
 		}
 		
-		function sendSnapchat() {
+		function _sendSnapchat() {
 			_socket.emit('notify', {
-				title: 'Snapchat',
 				message: 'Add me on snapchat @Swebliss'
 			});
 		}
 		
-		function sendTablet() {
+		function _sendTablet() {
 			_socket.emit('notify', {
-				title: 'Drawing Tablet',
 				message: 'I\'m currently drawing on a Wacom Cintiq 13HD!'
 			});
 		}
 		
-		function sendSoftware() {
+		function _sendSoftware() {
 			_socket.emit('notify', {
-				title: 'Drawing Software',
 				message: 'I\'m currently drawing in Manga Studio!'
 			});
 		}

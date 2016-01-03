@@ -29,14 +29,21 @@ function _verifyLoadPage(req, res, index, root) {
     }
     else {
         getTwitchTokenInfo(req.query.usertoken, function(body) {
-            getUserPermissions(JSON.parse(body), function(permissions) {
-                if (permissions.is_admin) {
-                    res.sendfile(index, { root: root});
-                }
-                else {
-                    res.send('Invalid Permissions. Are you sure you are supposed to be here?');
-                }
-            });
+            var response = JSON.parse(body);
+            
+            if (response.token.valid) {
+                getUserPermissions(JSON.parse(body), function(permissions) {
+                    if (permissions.is_admin) {
+                        res.sendfile(index, { root: root});
+                    }
+                    else {
+                        res.send('Invalid Permissions. Are you sure you are supposed to be here?');
+                    }
+                });
+            }
+            else {
+                res.send('Invalid Twitch Token!')
+            }
         });
     }
 }
@@ -60,6 +67,10 @@ function homeConnect(socket) {
 function actionsConnect(socket) {
     socket.on('notify', function(message) {
         notifications.send(message);
+    });
+    
+    socket.on('reload', function() {
+        notifications.emit('refresh', {});
     });
 }
 

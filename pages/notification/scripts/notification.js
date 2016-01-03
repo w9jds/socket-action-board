@@ -30,7 +30,7 @@
 		
 		function _runNotify(data) {
 			_isOpen = true;
-			_clearStyles()
+			_clearStyles();
 
 			$('.notify-text').text(data.message);
 			
@@ -39,6 +39,12 @@
 					$(style.selector).css(style.property, style.value);
 				});
 			}
+            if (data.audio) {
+                setTimeout(function() {
+                    var audio = data.audio.source ? new Audio(data.audio.source) : new Audio('http://goo.gl/p3Hm3Y');
+                    audio.play();
+                }, 1000);
+            }
 			
 			_triggerNotify();
 		}
@@ -52,6 +58,7 @@
 		function _clearStyles() {
 			$('.notify-content').removeAttr('style');
 			$('.icon').removeAttr('style');
+            $('.logo').removeAttr('style');
 		}
 		
 		function _triggerNotify() {
@@ -124,6 +131,9 @@
 
             _socket = io.connect(host);
             _socket.on('message', _received);
+            _socket.on('refresh', function() {
+                location.reload();
+            });
 		}
 		
 		return {
