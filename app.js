@@ -52,6 +52,9 @@ function _attachEvents() {
     home.on('connection', homeConnect);
     actions.on('connection', actionsConnect);
     admin.on('connection', adminConnect);
+    notifications.on('connection', function(socket) {
+        console.log('new notification client ' + socket.request.connection.remoteAddress);
+    });
 }
 
 function homeConnect(socket) {
@@ -71,6 +74,10 @@ function actionsConnect(socket) {
     
     socket.on('reload', function() {
         notifications.emit('refresh', {});
+    });
+    
+    socket.on('bababanana', function() {
+        notifications.emit('bababanana', {});
     });
 }
 

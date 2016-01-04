@@ -20,6 +20,9 @@
 			$('#snapchat').click(_sendSnapchat);
 			$('#tablet').click(_sendTablet);
             $('#send-custom').click(_sendCustom);
+            $('#bananarain').click(function() {
+                _socket.emit('bababanana', {});
+            });
             $('.use-audio').change(function() {
                 $('.audio-url-container').toggle();
             });

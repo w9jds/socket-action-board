@@ -5,11 +5,22 @@
 	global.Pages.Notify = (function() {
 		
 		var _socket,
+            _canvas,
+            _ctx,
+            _raining = false,
+            _bananainterval,
+            _rain = [],
 			_queue = [],
 			_isOpen = false;
 		
 		function init() {			
 			_connect();
+            
+            _canvas = document.getElementById('sheet');
+            _ctx = _canvas.getContext('2d');
+            
+            _canvas.height = window.innerHeight;
+            _canvas.width = window.innerWidth;
 			
 			Object.observe(_queue, function(changes) {
 				if (!_isOpen && _queue.length === 1) {
@@ -27,6 +38,67 @@
 				_runNotify(_queue[0]);
 			}
 		}
+        
+        function _startBananaRain() {
+            var audio = new Audio('http://swebliss.com/bababanana_ZJs7u4Sp.mp3'),
+                image = new Image();
+
+            audio.onended = function() {
+                _raining = false;
+            };
+
+            image.src = 'http://webbgata.se/assets/images/BananaPic2.png';
+            
+            audio.play();
+            _raining = true;
+            _rain = [];
+            _bananainterval = setInterval(_bananaDraw, 36);
+            for (var i = 0; i < 50; i++) {
+                _rain.push({
+                    image: image,
+                    x: Math.random() * (0, _canvas.width),
+                    y: Math.random() * (0, 5),
+                    rotation: 0,
+                    speed: 3 + Math.random() * 5,
+                });
+            }
+        }
+        
+        function _bananaDraw() {
+            var remove = [];
+
+            _ctx.clearRect(0, 0, _ctx.canvas.width, _ctx.canvas.height);
+            
+            if (_rain.length > 0) {
+                for (var i = 0; i < _rain.length; i++) {
+                    _ctx.save();
+                    _ctx.translate(_rain[i].x, _rain[i].y);
+                    _ctx.rotate(_rain[i].rotation * Math.PI / 180);
+                    
+                    _ctx.drawImage (_rain[i].image, -_rain[i].image.width/2, -_rain[i].image.width/2);
+                    _rain[i].rotation += _rain[i].speed;
+                    _rain[i].y += _rain[i].speed;
+                    // _rain[i].x += Math.random() * (-5, 5);
+                    if (_rain[i].y > _canvas.height && _raining) {  
+                        _rain[i].y = - 25 
+                        _rain[i].x = Math.random() * (0, _canvas.width);  
+                    }
+                    else if (_rain[i].y > _canvas.height && !_raining) {
+                        remove.push(i);
+                    }
+                    _ctx.restore();
+                }
+                
+                if (remove.length > 0) {
+                    $.each(remove, function(position) {
+                        _rain.splice(position, 1);
+                    });
+                }
+            }
+            else {
+                clearInterval(_bananainterval);
+            }
+        }
 		
 		function _runNotify(data) {
 			_isOpen = true;
@@ -131,6 +203,8 @@
 
             _socket = io.connect(host);
             _socket.on('message', _received);
+            // _socket.on('audio', _startAudio);
+            _socket.on('bababanana', _startBananaRain);
             _socket.on('refresh', function() {
                 location.reload();
             });

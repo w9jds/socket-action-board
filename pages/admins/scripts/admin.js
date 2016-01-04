@@ -14,17 +14,7 @@
 		}
         
         function _twitch() {
-            // Twitch.init({clientId: 'eapkg3vs1icwh3841z5br4hhm3thl61', token: ''}, function(error, status) {
-            //     if (status.authenticated) {
-            //         $('.user-menu').show();
-                    
-            //         _populateNav();
-            //         _verifyPermissions(status.token);
-            //     }
-            //     else {
-            //         $('.login-container').show();
-            //     }
-            // });
+
         }
         
         function _verifyPermissions(token) {
