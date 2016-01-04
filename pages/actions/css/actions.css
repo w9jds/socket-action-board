@@ -56,12 +56,16 @@ a:active {
 	background: #0e83cd;
 }
 
-.custom-container > div {
+.sound-container {
+    margin-top: 30px;
+}
+
+.custom-container > div, .sound-container > div {
     margin-top: 15px;
     color: white;
 }
 
-.custom-container {
+.custom-container, .sound-container {
     margin-left: 30px;
 }
 
@@ -70,6 +74,6 @@ a:active {
     width: 235px;
 }
 
-#send-custom {
+#send-custom, #send-sound {
     margin-top: 5px;
 }

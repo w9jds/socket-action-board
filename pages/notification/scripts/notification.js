@@ -35,7 +35,12 @@
 			}
 			
 			if (_queue.length > 0) {
-				_runNotify(_queue[0]);
+                if (_queue[0].message) {
+                    _runNotify(_queue[0]);
+                }
+				else {
+                    _runSound(_queue[0]);
+                }
 			}
 		}
         
@@ -120,12 +125,28 @@
 			
 			_triggerNotify();
 		}
+        
+        function _runSound(data) {
+            var audio = new Audio(data.source);
+            
+            audio.onended = function() {
+                _startQueue(true);
+            }
+            
+            setTimeout(function() {
+                audio.play();
+            }, data.delay);
+        }
 		
         function _received(data) {
 			if (_queue.indexOf(data) < 0) {
 				_queue.push(data);
 			}
         }
+        
+        function _startAudio(data) {
+		    _queue.push(data);
+        };
 		
 		function _clearStyles() {
 			$('.notify-content').removeAttr('style');
@@ -203,7 +224,7 @@
 
             _socket = io.connect(host);
             _socket.on('message', _received);
-            // _socket.on('audio', _startAudio);
+            _socket.on('audio', _startAudio);
             _socket.on('bababanana', _startBananaRain);
             _socket.on('refresh', function() {
                 location.reload();

@@ -72,6 +72,10 @@ function actionsConnect(socket) {
         notifications.send(message);
     });
     
+    socket.on('audio', function(message) {
+        notifications.emit('audio', message);
+    });
+    
     socket.on('reload', function() {
         notifications.emit('refresh', {});
     });

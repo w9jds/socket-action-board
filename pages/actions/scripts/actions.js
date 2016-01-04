@@ -20,6 +20,7 @@
 			$('#snapchat').click(_sendSnapchat);
 			$('#tablet').click(_sendTablet);
             $('#send-custom').click(_sendCustom);
+            $('#send-sound').click(_sendSound);
             $('#bananarain').click(function() {
                 _socket.emit('bababanana', {});
             });
@@ -60,6 +61,15 @@
             if ($('.custom-message').val()) {
                 message.message = $('.custom-message').val();
                 _socket.emit('notify', message);
+            }
+        }
+        
+        function _sendSound() {
+            if ($('.sound-audio-url').val()) {
+                _socket.emit('audio', {
+                    source: $('.sound-audio-url').val(),
+                    delay: $('.duration').val() ? parseInt($('.duration').val()) : 0
+                });
             }
         }
 		
