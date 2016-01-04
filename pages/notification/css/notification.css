@@ -58,3 +58,9 @@ body {
     background-repeat: no-repeat;
     background-position: center center; 
 }
+
+#sheet {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
